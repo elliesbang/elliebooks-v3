@@ -3,8 +3,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  // 1. 배포 시 파일 경로를 제대로 찾기 위해 필수!
-  base: './', 
+  // Cloudflare Pages에서 정적 자산 경로를 절대 경로로 맞추기
+  base: '/', 
   
   plugins: [react()],
   
