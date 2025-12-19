@@ -30,9 +30,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
           </div>
           
           <nav className="flex flex-col gap-2 px-4 mt-2">
-            <NavLink 
-              to="/admin" 
-              end
+            <NavLink
+              to="/admin/dashboard"
               className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-3 transition-all ${isActive ? 'bg-primary text-[#1F2937] font-bold shadow-lg' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
             >
               <span className="material-symbols-outlined">dashboard</span>

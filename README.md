@@ -18,3 +18,15 @@ View your app in AI Studio: https://ai.studio/apps/drive/1QJK_D3oM5ok9lc8TmEJI_S
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Supabase Auth setup
+
+1. Create a project in [Supabase](https://supabase.com/) and generate an email/password authentication provider.
+2. Add the following values to a `.env.local` file in the project root:
+
+   ```bash
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+3. Restart the dev server after editing environment variables so the new values are picked up by Vite.
