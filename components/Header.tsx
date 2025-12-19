@@ -1,9 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { NAV_ITEMS } from '../constants';
 
 const Header: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   return (
     <header className="glass-header sticky top-0 z-50 flex items-center justify-between border-b border-accent/5 px-6 lg:px-10 py-4 transition-all">
       <Link to="/" className="flex items-center gap-4 cursor-pointer group">
@@ -52,10 +57,49 @@ const Header: React.FC = () => {
           />
         </div>
       </div>
-      
-      <button className="md:hidden flex items-center justify-center text-accent">
-        <span className="material-symbols-outlined">menu</span>
-      </button>
+
+      <div className="md:hidden relative">
+        <button
+          className="flex items-center justify-center text-accent"
+          onClick={toggleMobileMenu}
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+        >
+          <span className="material-symbols-outlined">{isMobileMenuOpen ? 'close' : 'menu'}</span>
+        </button>
+
+        {isMobileMenuOpen && (
+          <div className="absolute right-0 mt-3 w-56 rounded-lg border border-accent/10 bg-[#0b111f]/90 backdrop-blur-md shadow-lg">
+            <nav className="flex flex-col py-2">
+              {NAV_ITEMS.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/10 ${
+                      isActive ? 'text-accent' : 'text-accent/80'
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="flex items-center justify-between border-t border-accent/10 px-4 py-3 text-sm text-accent/80">
+              <button className="flex items-center gap-2" onClick={closeMobileMenu}>
+                <span className="material-symbols-outlined text-lg">search</span>
+                <span>Search</span>
+              </button>
+              <button className="relative flex items-center gap-2" onClick={closeMobileMenu}>
+                <span className="material-symbols-outlined text-lg">shopping_bag</span>
+                <span className="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-accent">
+                  2
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   );
 };
