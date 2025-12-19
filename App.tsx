@@ -37,11 +37,12 @@ const App: React.FC = () => {
 
         <Routes>
           {/* 1. 관리자 경로 (Admin) */}
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={isAdmin ? <AdminLayout onLogout={handleLogout} /> : <Navigate to="/" replace />}
           >
-            <Route index element={<AdminDashboard />} />
+            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="main" element={<AdminMainManagement />} />
             <Route path="books" element={<AdminBookManagement />} />
             <Route path="inquiries" element={<AdminInquiryManagement />} />

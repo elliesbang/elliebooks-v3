@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 interface FooterProps {
   onLogin?: () => void;
@@ -8,19 +9,29 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ onLogin }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleAdminSubmit = (e: React.FormEvent) => {
+  const handleAdminSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (id === 'admin' && password === 'admin123') {
-      onLogin?.();
-      setIsModalOpen(false);
-      navigate('/admin');
-    } else {
-      alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert(error.message || '로그인에 실패했습니다. 다시 시도해주세요.');
+      setIsLoading(false);
+      return;
     }
+
+    onLogin?.();
+    setIsModalOpen(false);
+    setIsLoading(false);
+    navigate('/admin/dashboard');
   };
 
   return (
@@ -60,14 +71,14 @@ const Footer: React.FC<FooterProps> = ({ onLogin }) => {
               
               <form className="w-full flex flex-col gap-5" onSubmit={handleAdminSubmit}>
                 <div className="flex flex-col gap-2">
-                  <label className="text-accent text-sm font-bold ml-1">Admin ID</label>
+                  <label className="text-accent text-sm font-bold ml-1">이메일</label>
                   <div className="relative">
-                    <input 
-                      className="w-full h-12 rounded-lg border-gray-200 bg-gray-50 px-4 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm transition-all" 
-                      placeholder="Enter admin ID" 
-                      value={id}
-                      onChange={(e) => setId(e.target.value)}
-                      type="text"
+                    <input
+                      className="w-full h-12 rounded-lg border-gray-200 bg-gray-50 px-4 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm transition-all"
+                      placeholder="이메일을 입력하세요"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
                     />
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">person</span>
                   </div>
@@ -87,10 +98,11 @@ const Footer: React.FC<FooterProps> = ({ onLogin }) => {
                 </div>
                 <button 
                   type="submit"
-                  className="mt-4 w-full h-12 bg-primary hover:bg-[#ffe600] text-accent font-bold rounded-lg shadow-sm transition-all flex items-center justify-center gap-2"
+                  className="mt-4 w-full h-12 bg-primary hover:bg-[#ffe600] text-accent font-bold rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                  disabled={isLoading}
                 >
-                  Log In
-                  <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                  {isLoading ? '처리 중...' : 'Log In'}
+                  {!isLoading && <span className="material-symbols-outlined text-[20px]">arrow_forward</span>}
                 </button>
                 <button 
                   type="button"
