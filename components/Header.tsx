@@ -77,7 +77,7 @@ const Header: React.FC = () => {
                   onClick={closeMobileMenu}
                   className={({ isActive }) =>
                     `px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/10 ${
-                      isActive ? 'text-accent' : 'text-accent/80'
+                      isActive ? 'text-white' : 'text-white/80'
                     }`
                   }
                 >
@@ -85,7 +85,7 @@ const Header: React.FC = () => {
                 </NavLink>
               ))}
             </nav>
-            <div className="flex items-center justify-between border-t border-accent/10 px-4 py-3 text-sm text-accent/80">
+            <div className="flex items-center justify-between border-t border-accent/10 px-4 py-3 text-sm text-white/80">
               <button className="flex items-center gap-2" onClick={closeMobileMenu}>
                 <span className="material-symbols-outlined text-lg">search</span>
                 <span>Search</span>
